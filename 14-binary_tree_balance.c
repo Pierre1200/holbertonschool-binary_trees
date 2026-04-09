@@ -1,40 +1,42 @@
 #include "binary_trees.h"
 
 /**
- * h_balance - Mesure la hauteur pour le facteur de balance
- * @tree: Le nœud à mesurer
- * Return: La hauteur
+ * h_balance - Measures the height of a binary tree for balance factor
+ * @tree: Pointer to the node to measure
+ *
+ * Return: Height of the tree, or 0 if NULL
  */
-size_t h_balance(const binary_tree_t *tree)
+static size_t h_balance(const binary_tree_t *tree)
 {
-    size_t left, right;
+	size_t left_h, right_h;
 
-    if (tree == NULL)
-        return (0);
+	if (tree == NULL)
+		return (0);
 
-    left = h_balance(tree->left);
-    right = h_balance(tree->right);
+	left_h = h_balance(tree->left);
+	right_h = h_balance(tree->right);
 
-    return (1 + (left > right ? left : right));
+	return (1 + (left_h > right_h ? left_h : right_h));
 }
 
 /**
- * binary_tree_balance - Measures the balance factor
- * @tree: A pointer to the root node
- * Return: Balance factor, or 0 if NULL
+ * binary_tree_balance - Measures the balance factor of a binary tree
+ * @tree: A pointer to the root node of the tree to measure
+ *
+ * Return: Balance factor, or 0 if tree is NULL
  */
 int binary_tree_balance(const binary_tree_t *tree)
 {
-    int left_h, right_h;
+	int left_h, right_h;
 
-    if (tree == NULL)
-        return (0);
+	if (tree == NULL)
+		return (0);
 
-    /* On force le cast en int pour permettre les résultats négatifs */
-    left_h = (int)h_balance(tree->left);
-    right_h = (int)h_balance(tree->right);
+	/* On calcule la hauteur du sous-arbre gauche et droit */
+	left_h = (int)h_balance(tree->left);
+	right_h = (int)h_balance(tree->right);
 
-    return (left_h - right_h);
+	return (left_h - right_h);
 }
 
 
