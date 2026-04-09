@@ -1,5 +1,42 @@
-#include"binary_trees.h"
-#include<stdio.h>
+#include "binary_trees.h"
+
+/**
+ * tree_is_perfect - Checks if a binary tree is perfect using depth and level
+ * @tree: Pointer to the root node
+ * @d: Depth of the leftmost leaf
+ * @level: Current level of the node
+ *
+ * Return: 1 if perfect, 0 otherwise
+ */
+int tree_is_perfect(const binary_tree_t *tree, int d, int level)
+{
+	if (tree->left == NULL && tree->right == NULL)
+		return (d == level + 1);
+
+	if (tree->left == NULL || tree->right == NULL)
+		return (0);
+
+	return (tree_is_perfect(tree->left, d, level + 1) &&
+		tree_is_perfect(tree->right, d, level + 1));
+}
+
+/**
+ * tree_depth - Measures the depth of a node in a binary tree
+ * @tree: Pointer to the node to measure the depth
+ *
+ * Return: Depth of the node
+ */
+int tree_depth(const binary_tree_t *tree)
+{
+	int d = 0;
+
+	while (tree != NULL)
+	{
+		d++;
+		tree = tree->left;
+	}
+	return (d);
+}
 
 /**
  * binary_tree_is_perfect - Checks if a binary tree is perfect
@@ -9,27 +46,12 @@
  */
 int binary_tree_is_perfect(const binary_tree_t *tree)
 {
-size_t h_l = 0, h_r = 0;
+	int d;
 
-if (tree == NULL)
-return (0);
+	if (tree == NULL)
+		return (0);
 
-/* 1. On calcule les hauteurs avec la helper */
-h_l = tree_height(tree->left);
-h_r = tree_height(tree->right);
+	d = tree_depth(tree);
 
-	/* 2. On compare les hauteurs */
-	if (h_l == h_r)
-	{
-		/* Si c'est une feuille, c'est parfait ! */
-		if (tree->left == NULL && tree->right == NULL)
-			return (1);
-
-		/* Sinon, on vérifie récursivement les deux enfants */
-			return (binary_tree_is_perfect(tree->left) &&
-		binary_tree_is_perfect(tree->right));
-	}
-
-    /* 3. Si les hauteurs sont différentes, ce n'est pas parfait */
-	return (0);
+	return (tree_is_perfect(tree, d, 0));
 }
